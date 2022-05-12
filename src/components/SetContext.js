@@ -1,9 +1,8 @@
 import React from 'react';
-import AuthContext from './AuthContext';
+import {useAuthContext} from './AuthContext';
 
-const SetContext = ( { setAuth } ) => {
-    const auth = React.useContext(AuthContext);
-
+const SetContext = ( ) => {
+    const { auth , setAuth } = useAuthContext();
     const changeHandler = (event) => {
         const value = document.getElementById("newContext").value;
         setAuth(value);

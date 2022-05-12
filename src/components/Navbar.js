@@ -11,14 +11,17 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
+import { useNavigate } from 'react-router-dom';
+import {useAuthContext} from './AuthContext';
 
 export default function MenuAppBar() {
-  const [auth, setAuth] = React.useState(true);
+  const { auth } = useAuthContext();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const navigate = useNavigate();
 
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
-  };
+  // const handleChange = (event) => {
+  //   setAuth(event.target.checked);
+  // };
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -27,6 +30,18 @@ export default function MenuAppBar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const goHome = () => {
+    navigate('/home');
+  }
+
+  const goAbout = () => {
+    navigate('/about');
+  }
+
+  const goSetcontext = () => {
+    navigate('/setcontext');
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -55,6 +70,15 @@ export default function MenuAppBar() {
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Photos
+          </Typography>
+          <Typography variant="h8" component="div" onClick={goHome} sx={{ flexGrow: 1 }}>
+            Home
+          </Typography>
+          <Typography variant="h8" component="div" onClick={goAbout} sx={{ flexGrow: 1 }}>
+            About
+          </Typography>
+          <Typography variant="h8" component="div" onClick={goSetcontext} sx={{ flexGrow: 1 }}>
+            Set Context
           </Typography>
           {auth && (
             <div>

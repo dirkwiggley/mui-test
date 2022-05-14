@@ -1,6 +1,8 @@
 import React from 'react';
 import './App.css';
 import {useAuthContext} from './components/AuthContext';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 
 function App() {
   const { auth } = useAuthContext();
@@ -11,6 +13,8 @@ function App() {
 
   return (
     <>
+      <Navbar />
+      <Footer />
     </>
   );
 }

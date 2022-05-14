@@ -6,7 +6,10 @@ import App from './App';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import About from './components/About';
-import SetContext from './components/SetContext';
+import Profile from './components/Profile';
+import Login from './components/Login';
+import Exit from './components/Exit';
+import Footer from './components/Footer';
 
 import { AuthProvider } from './components/AuthContext';
 
@@ -16,15 +19,18 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <AuthProvider>
     <Router>
+      {/* <App /> */}
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/about" element={<About />} />
-        <Route path="/setcontext" element={<SetContext />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/login" element={<Login showLogin={true}/>} />
+        <Route path="/exit" element={<Exit />} />
       </Routes>
     </Router>
-    <footer>This is the footer</footer>
+    <Footer />
   </AuthProvider>
 );
 

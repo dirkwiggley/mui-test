@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -6,22 +6,35 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import Switch from '@mui/material/Switch';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormGroup from '@mui/material/FormGroup';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import { useNavigate } from 'react-router-dom';
-import {useAuthContext} from './AuthContext';
+import { Link as MaterialLink } from '@mui/material';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import { useAuthContext } from './AuthContext';
 
 export default function MenuAppBar() {
-  const { auth } = useAuthContext();
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const { auth, setAuth } = useAuthContext();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [roles, setRoles] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(null);
+
   const navigate = useNavigate();
 
-  // const handleChange = (event) => {
-  //   setAuth(event.target.checked);
-  // };
+  useEffect(() => {
+    if (auth && auth !== "") {
+      try {
+        let authObj = JSON.parse(auth);
+        let roles = authObj ? authObj.roles : null;
+        let isAdmin = roles ? roles.includes("ADMIN") : null;
+        setRoles(roles);
+        setIsAdmin(isAdmin);
+      } catch (err) {
+        console.error(err);
+        setRoles([]);
+        setIsAdmin(false);
+      }
+    }
+  }, [auth]);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -31,32 +44,21 @@ export default function MenuAppBar() {
     setAnchorEl(null);
   };
 
-  const goHome = () => {
-    navigate('/home');
+  const handleLogin = () => {
+    handleClose();
+    navigate('/login');
   }
 
-  const goAbout = () => {
-    navigate('/about');
-  }
-
-  const goSetcontext = () => {
-    navigate('/setcontext');
+  const handleLogout = () => {
+    handleClose();
+    navigate('/exit');
+    setAuth("");
+    setRoles([]);
+    setIsAdmin(false);
   }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      {/* <FormGroup>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={auth}
-              onChange={handleChange}
-              aria-label="login switch"
-            />
-          }
-          label={auth ? 'Logout' : 'Login'}
-        />
-      </FormGroup> */}
       <AppBar position="static">
         <Toolbar>
           <IconButton
@@ -69,49 +71,43 @@ export default function MenuAppBar() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Photos
+            App
           </Typography>
-          <Typography variant="h8" component="div" onClick={goHome} sx={{ flexGrow: 1 }}>
-            Home
-          </Typography>
-          <Typography variant="h8" component="div" onClick={goAbout} sx={{ flexGrow: 1 }}>
-            About
-          </Typography>
-          <Typography variant="h8" component="div" onClick={goSetcontext} sx={{ flexGrow: 1 }}>
-            Set Context
-          </Typography>
-          {auth && (
-            <div>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-              </Menu>
-            </div>
-          )}
+          <MaterialLink component={RouterLink} to='/home' variant="h8" sx={{ flexGrow: 1, color: "#FFFFFF" }}>Home</MaterialLink>
+          <MaterialLink component={RouterLink} to='/about' variant="h8" sx={{ flexGrow: 1, color: "#FFFFFF" }}>About</MaterialLink>
+          {(roles?.length > 0) ? <MaterialLink component={RouterLink} to='/profile' variant="h8" sx={{ flexGrow: 1, color: "#FFFFFF" }}>Profile</MaterialLink> : null}
+          <div>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleMenu}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              {(!roles || roles.length === 0) ? <MenuItem onClick={handleLogin}>Login</MenuItem> : null}
+              {(roles?.length > 0) ? <MenuItem onClick={handleLogout}>Logout</MenuItem> : null}
+              {(roles?.length > 0) ? <MenuItem onClick={handleClose}>Profile</MenuItem> : null}
+              <MenuItem onClick={handleClose}>My account</MenuItem>
+            </Menu>
+          </div>
         </Toolbar>
       </AppBar>
     </Box>

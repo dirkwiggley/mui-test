@@ -75,7 +75,8 @@ export default function MenuAppBar() {
           </Typography>
           <MaterialLink component={RouterLink} to='/home' variant="h8" sx={{ flexGrow: 1, color: "#FFFFFF" }}>Home</MaterialLink>
           <MaterialLink component={RouterLink} to='/about' variant="h8" sx={{ flexGrow: 1, color: "#FFFFFF" }}>About</MaterialLink>
-          {(roles?.length > 0) ? <MaterialLink component={RouterLink} to='/profile' variant="h8" sx={{ flexGrow: 1, color: "#FFFFFF" }}>Profile</MaterialLink> : null}
+          { isAdmin ? <MaterialLink component={RouterLink} to='/users' variant="h8" sx={{ flexGrow: 1, color: "#FFFFFF" }}>Users</MaterialLink> : null}
+          { (roles?.length > 0) ? <MaterialLink component={RouterLink} to='/profile' variant="h8" sx={{ flexGrow: 1, color: "#FFFFFF" }}>Profile</MaterialLink> : null}
           <div>
             <IconButton
               size="large"

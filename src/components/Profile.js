@@ -1,6 +1,6 @@
 import React from 'react';
-import { useRef, useState, useEffect } from 'react';
-import { styled } from '@mui/system';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Grid, Paper, Typography, TextField, Button, Link as Muilink } from "@mui/material";
 
 import { useAuthContext } from './AuthContext';
@@ -13,6 +13,14 @@ const Profile = () => {
   const [isAdmin, setIsAdmin] = useState(null);
 
   const { auth } = useAuthContext();
+
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    if (!auth || auth === "") {
+      navigate("/login");
+    }
+  }, [auth, navigate]);
 
   useEffect(() => {
     if (auth && auth !== "") {

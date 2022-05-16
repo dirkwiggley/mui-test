@@ -31,6 +31,9 @@ function Footer() {
         setLogin(null);
         setNickname(null);
       }
+    } else if (auth === "") {
+      setLogin("");
+      setNickname("");
     }
   }, [auth, setLogin, setNickname]);
 

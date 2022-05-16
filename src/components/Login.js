@@ -92,9 +92,6 @@ function Login( { showLogin } ) {
   (
     <Grid container spacing={0} justifyContent="center" direction="row">
       <Grid item >
-        {JSON.stringify(auth)}
-      </Grid>
-      <Grid item >
         <StyledGrid container direction="column" justifyContent="center" spacing={2} >
           <StyledPaper variant="elevation" elevation={2} >
             <Grid item>

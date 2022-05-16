@@ -19,3 +19,54 @@ export const loginApi = (login, pwd) => {
       });
   })
 }
+
+export const getUsers = () => {
+  return new Promise(function(resolve, reject) {
+    axios.get("http://10.0.0.221:3001/users/")
+      .then(response => {
+        if (response.data.error) {
+          reject(response.data.error);
+        } else {
+          resolve(response.data.users);
+        }
+      }).catch(err => {
+        console.error(err);
+        reject(err);
+      });
+  })
+}
+
+export const getUser = (userId) => {
+  return new Promise(function(resolve, reject) {
+    axios.get("http://10.0.0.221:3001/users/id/"+userId)
+      .then(response => {
+        if (response.data.error) {
+          reject(response.data.error);
+        } else {
+          const user = response.data.user;
+          const roles = JSON.parse(user.roles);
+          user.roles = roles;
+          resolve(response.data.user);
+        }
+      }).catch(err => {
+        console.error(err);
+        reject(err);
+      });
+  })
+}
+
+export const getRoles = () => {
+  return new Promise(function(resolve, reject) {
+    axios.get("http://10.0.0.221:3001/roles/")
+      .then(response => {
+        if (response.data.error) {
+          reject(response.data.error);
+        } else {
+          resolve(response.data.roles);
+        }
+      }).catch(err => {
+        console.error(err);
+        reject(err);
+      });
+  })
+}

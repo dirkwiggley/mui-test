@@ -23,9 +23,7 @@ function Home() {
     }
   }, [auth, setRoles, setIsAdmin]);
 
-  const rolesStr = roles ? JSON.stringify(roles, null, 2) : "none";
-  const out = `This user has roles: ${rolesStr}`;
-  return <div>{out}</div>
+  return <div>Home page</div>
 }
 
 export default Home;

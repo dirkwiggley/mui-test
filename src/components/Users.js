@@ -185,19 +185,16 @@ const Users = () => {
           </Item>
           <Item>
             <FormControl variant="filled" fullWidth>
-              <InputLabel htmlFor="loginInput">Login</InputLabel>
               <TextField id="loginInput" variant="filled" value={login} label="Login"></TextField>
             </FormControl>
           </Item>
           <Item>
             <FormControl variant="filled"fullWidth>
-              <InputLabel htmlFor="nicknameInput">Nickname</InputLabel>
               <TextField id="nicknameInput" variant="filled" value={nickname} label="Nickname"></TextField>
             </FormControl>
           </Item>
           <Item>
             <FormControl variant="filled" fullWidth>
-              <InputLabel htmlFor="emailInput">Email</InputLabel>
               <TextField id="emailInput" variant="filled" value={email} label="Email"></TextField>
             </FormControl>
           </Item>

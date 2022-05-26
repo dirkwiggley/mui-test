@@ -4,9 +4,6 @@ import {
   FormControl,
   Box,
   Paper,
-  Typography,
-  OutlinedInput,
-  Input,
   TextField,
   FormGroup,
   FormControlLabel,
@@ -17,45 +14,39 @@ import {
   Select,
   MenuItem,
   Stack,
-  InputLabel
+  InputLabel,
+  Grid,
+  Item,
+  Typography
 } from "@mui/material";
 import { styled } from '@mui/material/styles';
 
 import { useAuthContext } from './AuthContext';
-import { getUsers, getUser, getRoles } from '../api';
+import { getUsers, getUser, getRoles, updateUser } from '../api';
 
+const PAPER_COLOR = "#99d6ff";
+const LIGHT_PAPER_COLOR = "#a8e6f0";
 
-const Item = styled(Box)(({ theme }) => ({
-  // backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  bg: '#1A2027',
+const StackItem = styled(Box)(({ theme }) => ({
+  // backgroundColor: PAPER_COLOR,
+  selected: PAPER_COLOR,
   padding: theme.spacing(1),
   textAlign: 'left',
-  // color: theme.palette.text.secondary,
+  or: theme.palette.text.secondary,
 }));
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
+  backgroundColor: PAPER_COLOR,
   width: '90%',
   justify: 'center',
   textAlign: 'center'
 }));
 
-const MenuProps = {
-  // PaperProps: {
-  //   style: {
-  //     maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-  //     width: 250
-  //   }
-  // },
-  anchorOrigin: {
-    vertical: "bottom",
-    horizontal: "center"
-  },
-  transformOrigin: {
-    vertical: "top",
-    horizontal: "center"
-  },
-  variant: "menu"
-};
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  backgroundColor: "#99d6ff",
+  justify: 'center',
+  textAlign: 'center'
+}));
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -67,9 +58,8 @@ const Users = () => {
   const [active, setActive] = useState(false);
   const [resetpwd, setResetpwd] = useState(false);
   const [rolesList, setRolesList] = useState([]);
-  // const [selectedRoles, setSelectedRoles] = useState([]);
 
-  const { auth } = useAuthContext();
+  const { auth, setAuth } = useAuthContext();
 
   let navigate = useNavigate();
 
@@ -125,7 +115,7 @@ const Users = () => {
     setLogin("");
     setNickname("");
     setEmail("");
-    setRoles("");
+    setRoles([]);
     setActive(false);
     setResetpwd(false);
   }
@@ -159,6 +149,73 @@ const Users = () => {
     setResetpwd(!resetpwd);
   }
 
+  const handleChangeRoles = (role) => {
+    let filtered = null;
+    if (roles.includes(role)) {
+      filtered = roles.filter(function (value, index, arr) {
+        return value !== role;
+      });
+      setRoles(filtered);
+    } else {
+      filtered = [...roles];
+      filtered.push(role);
+      setRoles(filtered);
+    }
+  }
+
+  const handleUpdate = () => {
+    let userInfo = {};
+    userInfo.id = userId;
+    userInfo.login = login;
+    userInfo.nickname = nickname;
+    userInfo.email = email;
+    userInfo.roles = JSON.stringify(roles);
+    userInfo.active = active ? 1 : 0;
+    userInfo.resetpwd = resetpwd ? 1 : 0;
+    updateUser(userInfo)
+      .then(result => {
+        alert("Success");
+        const authObj = JSON.parse(auth);
+        if (userInfo.id === authObj.id) {
+          setAuth(JSON.stringify(userInfo));
+        }
+      }).catch(err => {
+        alert(err);
+      });
+  }
+
+  const handleInputChange = (elementName) => {
+    let element = document.getElementById(elementName);
+    let value = element.value;
+    if (elementName === "loginInput") {
+      setLogin(value);
+    } else if (elementName === "nicknameInput") {
+      setNickname(value);
+    } else if (elementName === "emailInput") {
+      setEmail(value);
+    } else {
+      alert("Invalid document element");
+    }
+  }
+
+  const getLoginInput = () => {
+    if (userId === "add") {
+      return (
+        <TextField
+          id="loginInput"
+          label="Login"
+          InputLabelProps={{ shrink: true }}
+          autoComplete="off"
+          value={login}
+          onChange={() => handleInputChange("loginInput")} />
+      );
+    } else {
+      return (
+        <TextField id="loginInput" variant="filled" value={login} label="Login"></TextField>
+      );
+    }
+  };
+
   return (
     <Box
       display="flex"
@@ -169,68 +226,86 @@ const Users = () => {
       }}>
       <StyledPaper square={false} >
         <Stack spacing={1}>
-          <Item><h3>Edit User</h3></Item>
-          <Item>
-          <FormControl variant="filled" sx={{ width: "100%" }}>
+          <StackItem><h3>Edit User</h3></StackItem>
+          <StackItem>
+            <FormControl variant="filled" fullWidth>
               <InputLabel id="select-label">User</InputLabel>
               <Select
                 labelId="select-label"
-                id="select"
-                value={userId}
+                id="select-user"
+                value={users?.length > 0 ? userId : ""}
                 onChange={handleSelectUser}
               >
                 {users}
               </Select>
             </FormControl>
-          </Item>
-          <Item>
+          </StackItem>
+          <StackItem>
             <FormControl variant="filled" fullWidth>
-              <TextField id="loginInput" variant="filled" value={login} label="Login"></TextField>
+              {getLoginInput()}
             </FormControl>
-          </Item>
-          <Item>
-            <FormControl variant="filled"fullWidth>
-              <TextField id="nicknameInput" variant="filled" value={nickname} label="Nickname"></TextField>
-            </FormControl>
-          </Item>
-          <Item>
+          </StackItem>
+          <StackItem>
             <FormControl variant="filled" fullWidth>
-              <TextField id="emailInput" variant="filled" value={email} label="Email"></TextField>
+              <TextField
+                id="nicknameInput"
+                label="Nickname"
+                InputLabelProps={{ shrink: true }}
+                autoComplete="off"
+                value={nickname}
+                onChange={() => handleInputChange("nicknameInput")} />
             </FormControl>
-          </Item>
-          <Item>
-            <FormControl variant="filled" sx={{ width: "100%" }}>
-              <InputLabel id="mutiple-select-label">Roles</InputLabel>
-              <Select
-                labelId="mutiple-select-label"
-                multiple
-                value={roles}
-                // onChange={handleChange}
-                renderValue={(selected) => "[" + selected.join(", ") + "]"}
-                MenuProps={MenuProps}
-              >
+          </StackItem>
+          <StackItem>
+            <FormControl variant="filled" fullWidth>
+              <TextField
+                id="emailInput"
+                label="Email"
+                InputLabelProps={{ shrink: true }}
+                autoComplete="off"
+                value={email}
+                onChange={() => handleInputChange("emailInput")} />
+            </FormControl>
+          </StackItem>
+          <StackItem>
+            <StyledPaper sx={{ backgroundColor: LIGHT_PAPER_COLOR, width: "100%" }}>
+              <Typography sx={{ display: "flex", ml: 2, pt: 2 }} >
+                Roles
+              </Typography>
+              <FormControl sx={{ width: "100%", ml: 2 }}>
                 {rolesList.map((option) => (
-                  <MenuItem key={option} value={option}>
-                    <ListItemIcon>
-                      {/* Is this option in the users roles? */}
-                      <Checkbox checked={roles.indexOf(option) > -1} />
-                    </ListItemIcon>
-                    <ListItemText primary={option} />
-                  </MenuItem>
+                  <FormGroup key={option}>
+                    {/* Is this option in the users roles? */}
+                    <FormControlLabel control={<Checkbox checked={roles?.includes(option)} />} label={option} onChange={() => handleChangeRoles(option)} />
+                  </FormGroup>
                 ))}
-              </Select>
-            </FormControl>
-          </Item>
-          <Item>
-            <FormGroup>
-              <FormControlLabel control={<Checkbox id="active" checked={active} onClick={handleActive} />} label="Active" />
-            </FormGroup>
-          </Item>
-          <Item>
-            <FormGroup>
-              <FormControlLabel control={<Checkbox id="resetpassword" checked={resetpwd} onClick={handleResetpwd} />} label="Reset Password" />
-            </FormGroup>
-          </Item>
+              </FormControl>
+            </StyledPaper>
+          </StackItem>
+          <StackItem>
+            <StyledPaper sx={{ backgroundColor: "#a8e6f0", width: "100%" }}>
+              <Stack>
+                <StackItem>
+                  <Typography sx={{ p: 0, ml: 1 }}>
+                    Misc
+                  </Typography>
+                </StackItem>
+                <StackItem>
+                  <FormGroup>
+                    <FormControlLabel control={<Checkbox id="active" checked={active} onClick={handleActive} sx={{ p: 0, ml: 2 }} />} label="Active" />
+                  </FormGroup>
+                </StackItem>
+                <StackItem>
+                  <FormGroup>
+                    <FormControlLabel control={<Checkbox id="resetpassword" checked={resetpwd} onClick={handleResetpwd} sx={{ p: 0, ml: 2 }} />} label="Reset Password" />
+                  </FormGroup>
+                </StackItem>
+              </Stack>
+            </StyledPaper>
+          </StackItem>
+          <StackItem>
+            <Button variant="contained" onClick={handleUpdate}>Update</Button>
+          </StackItem>
         </Stack>
       </StyledPaper>
     </Box>

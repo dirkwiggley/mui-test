@@ -70,3 +70,19 @@ export const getRoles = () => {
       });
   })
 }
+
+export const updateUser = (userInfo) => {
+  return new Promise(function(resolve, reject) {
+    axios.post("http://10.0.0.221:3001/users/update/", userInfo)
+      .then(response => {
+        if (response.data.error) {
+          reject(response.data.error);
+        } else {
+          resolve()
+        }
+      }).catch(err => {
+        console.error(err);
+        reject(err);
+      })
+  })
+}

@@ -57,6 +57,11 @@ export default function MenuAppBar() {
     setIsAdmin(false);
   }
 
+  const handleProfile = () => {
+    handleClose();
+    navigate('/profile');
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -105,8 +110,8 @@ export default function MenuAppBar() {
             >
               {(!roles || roles.length === 0) ? <MenuItem onClick={handleLogin}>Login</MenuItem> : null}
               {(roles?.length > 0) ? <MenuItem onClick={handleLogout}>Logout</MenuItem> : null}
-              {(roles?.length > 0) ? <MenuItem onClick={handleClose}>Profile</MenuItem> : null}
-              <MenuItem onClick={handleClose}>My account</MenuItem>
+              {(roles?.length > 0) ? <MenuItem onClick={handleProfile}>Profile</MenuItem> : null}
+              {/* <MenuItem onClick={handleClose}>My account</MenuItem> */}
             </Menu>
           </div>
         </Toolbar>

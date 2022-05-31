@@ -10,6 +10,7 @@ import Login from './components/Login';
 import Exit from './components/Exit';
 import Users from './components/Users';
 import Footer from './components/Footer';
+import ResetPwd from './components/ResetPwd';
 
 function Layout() {
   const { auth } = useAuthContext();
@@ -29,6 +30,7 @@ function Layout() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/login" element={<Login showLogin={true} />} />
           <Route path="/users" element={<Users />} />
+          <Route path="/resetpassword" element={<ResetPwd />} />
           <Route path="/exit" element={<Exit />} />
         </Routes>
       </Router>

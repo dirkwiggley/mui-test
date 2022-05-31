@@ -58,10 +58,12 @@ function Login( { showLogin } ) {
 
   const changeLogin = (event) => {
     setLogin(event.target.value);
+    setErrMsg("");
   }
 
   const changePassword = (event) => {
     setPassword(event.target.value);
+    setErrMsg("");
   }
 
   const handleSubmit = async (event) => {
@@ -73,7 +75,11 @@ function Login( { showLogin } ) {
         setLogin('');
         setPassword('');
         setShow(false);
-        navigate("/home");
+        if (response.resetpwd) {
+          navigate("/resetpassword"); 
+        } else {
+          navigate("/home");
+        }
       }).catch(err => {
         if (!err?.response) {
           setErrMsg('No Server Response');
@@ -84,7 +90,6 @@ function Login( { showLogin } ) {
         } else {
           setErrMsg('Login Failed');
         }
-        errRef.current.focus();
       });
   }
 
@@ -95,7 +100,7 @@ function Login( { showLogin } ) {
         <StyledGrid container direction="column" justifyContent="center" spacing={2} >
           <StyledPaper variant="elevation" elevation={2} >
             <Grid item>
-              {errMsg ? <ErrMsgTypography ref={errRef} aria-live="assertive" /> : <OffscreenTypography ref={errRef} aria-live="assertive" />}
+              {errMsg === "" ? <OffscreenTypography ref={errRef} aria-live="assertive" /> : <ErrMsgTypography ref={errRef} aria-live="assertive" >{errMsg}</ErrMsgTypography>}
             </Grid>
             <Grid item>
               <Typography component="h1" variant="h5">Sign in</Typography>

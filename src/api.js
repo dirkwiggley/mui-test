@@ -1,9 +1,11 @@
-const axios = require('axios');
+// const axios = require('axios');
+import axios from 'axios';
+import CONFIG from './config';
 
 export const loginApi = (login, pwd) => {
   return new Promise(function (resolve, reject) {
     const params = { login: login, password: pwd };
-    axios.put('http://10.0.0.221:3001/users/login/', params)
+    axios.put(`${CONFIG.baseDbURL}/users/login/`, params)
       .then(response => {
         if (response.data.error) {
           reject(response.data.error);
@@ -22,7 +24,7 @@ export const loginApi = (login, pwd) => {
 
 export const getUsers = () => {
   return new Promise(function(resolve, reject) {
-    axios.get("http://10.0.0.221:3001/users/")
+    axios.get(`${CONFIG.baseDbURL}/users/`)
       .then(response => {
         if (response.data.error) {
           reject(response.data.error);
@@ -38,7 +40,7 @@ export const getUsers = () => {
 
 export const getUser = (userId) => {
   return new Promise(function(resolve, reject) {
-    axios.get("http://10.0.0.221:3001/users/id/"+userId)
+    axios.get(`${CONFIG.baseDbURL}/users/id/${userId}`)
       .then(response => {
         if (response.data.error) {
           reject(response.data.error);
@@ -57,7 +59,7 @@ export const getUser = (userId) => {
 
 export const getRoles = () => {
   return new Promise(function(resolve, reject) {
-    axios.get("http://10.0.0.221:3001/roles/")
+    axios.get(`${CONFIG.baseDbURL}/roles/`)
       .then(response => {
         if (response.data.error) {
           reject(response.data.error);
@@ -73,7 +75,7 @@ export const getRoles = () => {
 
 export const updateUser = (userInfo) => {
   return new Promise(function(resolve, reject) {
-    axios.post("http://10.0.0.221:3001/users/update/", userInfo)
+    axios.post(`${CONFIG.baseDbURL}/users/update/`, userInfo)
       .then(response => {
         if (response.data.error) {
           reject(response.data.error);
@@ -86,3 +88,21 @@ export const updateUser = (userInfo) => {
       })
   })
 }
+
+export const resetPassword = (userId, newPassword) => {
+  return new Promise(function(resolve, reject) {
+    const userInfo = { "id" : userId, "password" : newPassword };
+    axios.post(`${CONFIG.baseDbURL}/users/resetpassword/`, userInfo)
+      .then(response => {
+        if (response.data.error) {
+          reject(response.data.error);
+        } else {
+          resolve();
+        }
+      }).catch(err => {
+        console.error(err);
+        reject(err);
+      });
+  })
+}
+

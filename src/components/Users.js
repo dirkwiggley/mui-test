@@ -102,13 +102,33 @@ const Users = () => {
     }).catch(err => {
       console.error(err);
     });
-  }, [auth]);
+  }, [auth, navigate]);
 
   useEffect(() => {
     if (!auth || auth === "") {
       navigate("/login");
     }
   }, [auth, navigate]);
+
+  const isAdmin = () => {
+    const currentUser = auth ? JSON.parse(auth) : null;
+    return currentUser ? currentUser.roles.includes('ADMIN') : false;
+  }
+
+  const getUsersAndUpdateSelect = () => {
+      getUsers().then(response => {
+      const newUsers = [];
+      response.forEach(element => {
+        newUsers.push(<MenuItem key={element.id} value={element.id}>{element.login}({element.nickname})</MenuItem>);
+      });
+      if (isAdmin()) {
+        newUsers.push(<MenuItem key="add" value="add">Add a user</MenuItem>);
+      }
+      setUsers(newUsers);
+    }).catch(err => {
+      console.error(err);
+    });
+  }
 
   const resetUser = (id = "") => {
     setUserId(id);
@@ -178,7 +198,8 @@ const Users = () => {
         const authObj = JSON.parse(auth);
         if (userInfo.id === authObj.id) {
           setAuth(JSON.stringify(userInfo));
-        }
+        };
+        getUsersAndUpdateSelect();
       }).catch(err => {
         alert(err);
       });
@@ -189,8 +210,10 @@ const Users = () => {
     let value = element.value;
     if (elementName === "loginInput") {
       setLogin(value);
+      getUsersAndUpdateSelect();
     } else if (elementName === "nicknameInput") {
       setNickname(value);
+      getUsersAndUpdateSelect();
     } else if (elementName === "emailInput") {
       setEmail(value);
     } else {

@@ -2,14 +2,18 @@ import { useEffect, useState } from 'react';
 import { Box, Paper } from "@mui/material";
 import { useAuthContext } from './AuthContext';
 
+import { DARKEST_BLUE } from '../colors';
+
 const boxStyle = {
   width: '100%',
   bottom: 0,
-  position: "absolute"
+  position: "absolute",
+  borderRadius: 0
 };
 
 const paperStyle = {
-  backgroundColor: "primary.main"
+  backgroundColor: DARKEST_BLUE,
+  borderRadius: 0
 }
 
 function Footer() {

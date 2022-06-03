@@ -5,6 +5,7 @@ import { Grid, Paper, Typography, TextField, Button, Link as Muilink } from "@mu
 import { loginApi } from '../api';
 
 import {useAuthContext} from './AuthContext';
+import { DARKEST_BLUE } from '../colors';
 
 const StyledGrid = styled(Grid, {
   name: "StyledGrid",
@@ -133,13 +134,13 @@ function Login( { showLogin } ) {
                       variant="contained"
                       color="primary"
                       type="submit"
-                      sx={{ width: "100%" }} >Submit</Button>
+                      sx={{ width: "100%", backgroundColor: DARKEST_BLUE }} >Submit</Button>
                   </Grid>
                 </Grid>
               </form>
             </Grid>
             <Grid item>
-              <Muilink href="#" variant="body2">Forgot Password?</Muilink>
+              <Muilink href="#" variant="body2" sx={{ color: DARKEST_BLUE }}>Forgot Password?</Muilink>
             </Grid>
           </StyledPaper >
         </StyledGrid >

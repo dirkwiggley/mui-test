@@ -12,6 +12,8 @@ import { Link as MaterialLink } from '@mui/material';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { useAuthContext } from './AuthContext';
 
+import { DARKEST_BLUE } from '../colors';
+
 export default function MenuAppBar() {
   const { auth, setAuth } = useAuthContext();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -65,7 +67,7 @@ export default function MenuAppBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar sx={{ backgroundColor: DARKEST_BLUE }}>
           <IconButton
             size="large"
             edge="start"
@@ -81,6 +83,7 @@ export default function MenuAppBar() {
           <MaterialLink component={RouterLink} to='/home' variant="h8" sx={{ flexGrow: 1, color: "#FFFFFF" }}>Home</MaterialLink>
           <MaterialLink component={RouterLink} to='/about' variant="h8" sx={{ flexGrow: 1, color: "#FFFFFF" }}>About</MaterialLink>
           { isAdmin ? <MaterialLink component={RouterLink} to='/users' variant="h8" sx={{ flexGrow: 1, color: "#FFFFFF" }}>Users</MaterialLink> : null}
+          { isAdmin ? <MaterialLink component={RouterLink} to='/dbeditor' variant="h8" sx={{ flexGrow: 1, color: "#FFFFFF" }}>DB Editor</MaterialLink> : null}
           { (roles?.length > 0) ? <MaterialLink component={RouterLink} to='/profile' variant="h8" sx={{ flexGrow: 1, color: "#FFFFFF" }}>Profile</MaterialLink> : null}
           <div>
             <IconButton
@@ -111,7 +114,6 @@ export default function MenuAppBar() {
               {(!roles || roles.length === 0) ? <MenuItem onClick={handleLogin}>Login</MenuItem> : null}
               {(roles?.length > 0) ? <MenuItem onClick={handleLogout}>Logout</MenuItem> : null}
               {(roles?.length > 0) ? <MenuItem onClick={handleProfile}>Profile</MenuItem> : null}
-              {/* <MenuItem onClick={handleClose}>My account</MenuItem> */}
             </Menu>
           </div>
         </Toolbar>

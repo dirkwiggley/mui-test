@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAuthContext } from './components/AuthContext';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Box } from '@mui/material';
 
 import Navbar from './components/Navbar';
 import Home from './components/Home';
@@ -11,6 +12,7 @@ import Exit from './components/Exit';
 import Users from './components/Users';
 import Footer from './components/Footer';
 import ResetPwd from './components/ResetPwd';
+import DBEditor from './components/DBEditor/DBEditor';
 
 function Layout() {
   const { auth } = useAuthContext();
@@ -31,6 +33,7 @@ function Layout() {
           <Route path="/login" element={<Login showLogin={true} />} />
           <Route path="/users" element={<Users />} />
           <Route path="/resetpassword" element={<ResetPwd />} />
+          <Route path="/dbeditor" element={<DBEditor />} />
           <Route path="/exit" element={<Exit />} />
         </Routes>
       </Router>

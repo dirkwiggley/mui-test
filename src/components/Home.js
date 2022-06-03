@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import {useAuthContext} from './AuthContext';
+import { Box } from '@mui/material';
+import { LIGHTEST_BLUE } from '../colors';
 
 function Home() {
   const [roles, setRoles] = useState(null);
@@ -23,7 +25,7 @@ function Home() {
     }
   }, [auth, setRoles, setIsAdmin]);
 
-  return <div>Home page</div>
+  return <Box sx={{ backgroundColor: LIGHTEST_BLUE }}>Home page</Box>
 }
 
 export default Home;

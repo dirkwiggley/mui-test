@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Grid, Paper, Typography, TextField, Button, Link as Muilink } from "@mui/material";
 
 import { useAuthContext } from './AuthContext';
+import { LIGHT_BLUE } from '../colors';
 
 const Profile = () => {
   const [login, setLogin] = useState("");

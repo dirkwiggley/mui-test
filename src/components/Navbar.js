@@ -82,7 +82,7 @@ export default function MenuAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="sticky">
+      <AppBar position="sticky" sx={{ boxShadow: 0}}>
         <Toolbar sx={{ bgcolor: "background.darkestBlue" }}>
           <MobileBox>
             <IconButton

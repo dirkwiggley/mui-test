@@ -163,7 +163,7 @@ const StyledIdTableCell = styled(TableCell, {
   slot: "Wrapper"
 })({
   '&:hover': {
-    backgroundColor: "text.disabled"/*theme.palette.grey[100]*/,
+    backgroundColor: "background.lightGray",
   }
 });
 
@@ -175,7 +175,7 @@ const StyledTableCell = styled(TableCell, {
   cursor: 'pointer',
   '&:hover': {
     cursor: 'pointer',
-    backgroundColor: "text.disabled" /*theme.palette.grey[100]*/,
+    backgroundColor: "lightGray",
   },
 });
 
@@ -184,11 +184,17 @@ const StyledTableHeaderGrid = styled(Grid, {
   slot: "Wrapper"
 })({
   marginTop: "50px", 
-  backgroundColor: 
-  "text.disabled", padding: 4
+  backgroundColor: "lightGray", 
+  padding: 4
+});
+
+const StyledHeaderGrid = styled(Grid, {
+  name: "StyledHeaderGrid",
+  slot: "Wrapper"
+})({
+  marginTop: "50px", 
+  padding: 4
 })
-
-
 
 export default function CustomPaginationActionsTable() {
   const { auth, setAuth } = useAuthContext();
@@ -208,8 +214,6 @@ export default function CustomPaginationActionsTable() {
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
   const [showDBEMenu, setShowDBEMenu] = useState(false);
   const [currentSelection, setCurrentSelection] = useState({});
-
-  // const classes = useStyles();
 
   useEffect(() => {
     console.log(JSON.stringify(currentSelection));
@@ -270,12 +274,17 @@ export default function CustomPaginationActionsTable() {
             headers.push(
               <TableCell
                 key={index}
-                // className={classes.headerElement}
-                sx={{ backgroundColor: "#FFFCBB" }}
+                sx={{ 
+                  bgcolor: "background.lightBlue",
+                  "&:hover": {
+                    cursor: "pointer",
+                    backgroundColor: "background.darkerBlue",
+                  }
+                }}
                 component="th"
                 scope="row"
                 onDoubleClick={e => handleDoubleClick(e, "header", index, element, currentSelection.tableName)}>
-                {element}
+                  {element} 
               </TableCell>
             );
           });
@@ -432,9 +441,9 @@ export default function CustomPaginationActionsTable() {
   }
 
   return (rows && currentSelection.tableName) ? (
-    <StyledTableHeaderGrid>
+    <StyledHeaderGrid>
       {showDBEMenu ? (
-        <div
+        <Box
           sx={{
             height: "100vh",
             width: "100vh",
@@ -458,7 +467,7 @@ export default function CustomPaginationActionsTable() {
             rtd={() => showRenameTableDialog}
             rcd={() => showRenameColumnDialog}
           />
-        </div>
+        </Box>
       ) : null}
       <AddTableDialog
         openDlg={showAddTblDlg ? showAddTblDlg : false}
@@ -545,13 +554,13 @@ export default function CustomPaginationActionsTable() {
         </TableContainer>
 
       </Grid>
-    </StyledTableHeaderGrid>
+    </StyledHeaderGrid>
   ) :
-    <StyledTableHeaderGrid>
+    <StyledHeaderGrid>
       <Grid item>
         <DBSelect
           htc={() => handleTableChange}
           tables={tables} />
       </Grid>
-    </StyledTableHeaderGrid>;
+    </StyledHeaderGrid>;
 }

@@ -23,6 +23,7 @@ export const theme = createTheme({
       lightBlue: "#79DAE8",
       lightestBlue: "#E8F9FD",
       white: "#FFFFFF",
+      lightGray: "#EEEEEE",
     },
   }
 });

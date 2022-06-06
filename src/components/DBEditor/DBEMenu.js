@@ -3,16 +3,14 @@ import * as React from 'react';
 import { TextField, List, ListItem, Box } from "@mui/material";
 import { styled } from '@mui/system';
 
+
 const StyledListItem = styled(ListItem, {
   name: "StyledListItem",
   slot: "Wrapper"
 })({
     paddingLeft: '5px',
     cursor: 'pointer',
-    '&:hover': {
-      cursor: 'pointer',
-      backgroundColor: "text.disabled",
-  },
+    bgcolor: "background.lightestBlue",
 });
 
 const StyledBox = styled(Box, {
@@ -51,6 +49,13 @@ const menuBox = {
   opacity: "1",
 }
 
+const menuItemBox = {
+  "&:hover": {
+    cursor: 'pointer',
+    bgcolor: "background.lightGray",
+  },
+}
+
 function DBEMenu({ x, y, ui, cs, ctd, dt, cc, dc, rtd, rcd }) {
   const [updateItem] = React.useState(ui);
   const [xPos] = React.useState(x);
@@ -74,8 +79,8 @@ function DBEMenu({ x, y, ui, cs, ctd, dt, cc, dc, rtd, rcd }) {
             left: xPos
           }}
         >
-          <StyledListItem onClick={() => showCreateTableDialog(true)}>Create new table</StyledListItem>
-          <StyledListItem onClick={() => showDeleteTableDialog(true)}>Delete this table</StyledListItem>
+          <Box sx={{ ...menuItemBox }}> <StyledListItem onClick={() => showCreateTableDialog(true)}>Create new table</StyledListItem> </Box>
+          <Box sx={{ ...menuItemBox }}> <StyledListItem onClick={() => showDeleteTableDialog(true)}>Delete this table</StyledListItem> </Box>
           <StyledListItem onClick={() => showRenameTableDialog(true)}>Rename this table</StyledListItem>
           <StyledListItem onClick={() => showCreateColumnDialog(true)}>Add column</StyledListItem>
           <StyledListItem onClick={() => showRenameColumnDialog(true)}>Rename this column</StyledListItem>

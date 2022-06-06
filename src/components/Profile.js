@@ -2,9 +2,15 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Grid, Paper, Typography, TextField, Button, Link as Muilink } from "@mui/material";
-
+import { styled } from '@mui/material/styles';
 import { useAuthContext } from './AuthContext';
-import { LIGHT_BLUE } from '../colors';
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  justifyContent: "center",
+  minHeight: "20vh",
+  padding: "50px",
+  backgroundColor: "background.scissors",
+}));
 
 const Profile = () => {
   const [login, setLogin] = useState("");
@@ -44,7 +50,7 @@ const Profile = () => {
 
   const getRoles = () => {
     return roles ? JSON.stringify(roles, null, 2) : "none";
-  } 
+  }
 
   const handleSubmit = () => {
 
@@ -54,14 +60,10 @@ const Profile = () => {
     <Grid container spacing={0} justifyContent="center" direction="row">
       <Grid item >
         <Grid container direction="column" justifyContent="center" spacing={2} sx={{
-          justifyContent: "center", 
+          justifyContent: "center",
           minHeight: "90vh"
         }} >
-          <Paper variant="elevation" elevation={2} sx={{
-            justifyContent: "center", 
-            minHeight: "20vh", 
-            padding: "50px"
-          }}>
+          <StyledPaper variant="elevation" elevation={2} sx={{ bgcolor: "background.lightestBlue" }}>
             <Grid item>
               <Typography component="h1" variant="h5">Profile</Typography>
             </Grid>
@@ -83,7 +85,7 @@ const Profile = () => {
                 </Grid>
               </form>
             </Grid>
-          </Paper >
+          </StyledPaper >
         </Grid >
       </Grid >
     </Grid >);

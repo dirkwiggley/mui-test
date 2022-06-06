@@ -13,6 +13,7 @@ import Users from './components/Users';
 import Footer from './components/Footer';
 import ResetPwd from './components/ResetPwd';
 import DBEditor from './components/DBEditor/DBEditor';
+import { Container } from '@mui/system';
 
 function Layout() {
   const { auth } = useAuthContext();
@@ -23,21 +24,24 @@ function Layout() {
 
   return (
     <>
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/login" element={<Login showLogin={true} />} />
-          <Route path="/users" element={<Users />} />
-          <Route path="/resetpassword" element={<ResetPwd />} />
-          <Route path="/dbeditor" element={<DBEditor />} />
-          <Route path="/exit" element={<Exit />} />
-        </Routes>
-      </Router>
-      <Footer />
+      <Box sx={{ height: "100vh"}} >
+        <Router>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/login" element={<Login showLogin={true} />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/resetpassword" element={<ResetPwd />} />
+            <Route path="/dbeditor" element={<DBEditor />} />
+            <Route path="/exit" element={<Exit />} />
+          </Routes>
+
+        </Router>
+        <Footer />
+      </Box>
     </>
   );
 }

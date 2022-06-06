@@ -5,7 +5,6 @@ import { Grid, Paper, Typography, TextField, Button, Link as Muilink } from "@mu
 import { loginApi } from '../api';
 
 import {useAuthContext} from './AuthContext';
-import { DARKEST_BLUE } from '../colors';
 
 const StyledGrid = styled(Grid, {
   name: "StyledGrid",
@@ -99,7 +98,7 @@ function Login( { showLogin } ) {
     <Grid container spacing={0} justifyContent="center" direction="row">
       <Grid item >
         <StyledGrid container direction="column" justifyContent="center" spacing={2} >
-          <StyledPaper variant="elevation" elevation={2} >
+          <StyledPaper variant="elevation" elevation={2} sx={{ bgcolor: "background.lightestBlue" }}>
             <Grid item>
               {errMsg === "" ? <OffscreenTypography ref={errRef} aria-live="assertive" /> : <ErrMsgTypography ref={errRef} aria-live="assertive" >{errMsg}</ErrMsgTypography>}
             </Grid>
@@ -134,13 +133,13 @@ function Login( { showLogin } ) {
                       variant="contained"
                       color="primary"
                       type="submit"
-                      sx={{ width: "100%", backgroundColor: DARKEST_BLUE }} >Submit</Button>
+                      sx={{ width: "100%", bgcolor: "background.darkestBlue" }} >Submit</Button>
                   </Grid>
                 </Grid>
               </form>
             </Grid>
             <Grid item>
-              <Muilink href="#" variant="body2" sx={{ color: DARKEST_BLUE }}>Forgot Password?</Muilink>
+              <Muilink href="#" variant="body2" sx={{ color: "background.darkestBlue" }}>Forgot Password?</Muilink>
             </Grid>
           </StyledPaper >
         </StyledGrid >

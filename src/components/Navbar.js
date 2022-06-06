@@ -9,10 +9,26 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import { Link as MaterialLink } from '@mui/material';
+import { styled } from '@mui/system';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { useAuthContext } from './AuthContext';
 
-import { DARKEST_BLUE } from '../colors';
+const MobileBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  [theme.breakpoints.up("sm")]: {
+    display: "none"
+  }
+}));
+
+const NonMobileBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flex: 1,
+  alignItems: "center",
+  [theme.breakpoints.down("sm")]: {
+    display: "none"
+  }
+}));
 
 export default function MenuAppBar() {
   const { auth, setAuth } = useAuthContext();
@@ -66,36 +82,40 @@ export default function MenuAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar sx={{ backgroundColor: DARKEST_BLUE }}>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            App
-          </Typography>
-          <MaterialLink component={RouterLink} to='/home' variant="h8" sx={{ flexGrow: 1, color: "#FFFFFF" }}>Home</MaterialLink>
-          <MaterialLink component={RouterLink} to='/about' variant="h8" sx={{ flexGrow: 1, color: "#FFFFFF" }}>About</MaterialLink>
-          { isAdmin ? <MaterialLink component={RouterLink} to='/users' variant="h8" sx={{ flexGrow: 1, color: "#FFFFFF" }}>Users</MaterialLink> : null}
-          { isAdmin ? <MaterialLink component={RouterLink} to='/dbeditor' variant="h8" sx={{ flexGrow: 1, color: "#FFFFFF" }}>DB Editor</MaterialLink> : null}
-          { (roles?.length > 0) ? <MaterialLink component={RouterLink} to='/profile' variant="h8" sx={{ flexGrow: 1, color: "#FFFFFF" }}>Profile</MaterialLink> : null}
-          <div>
+      <AppBar position="sticky">
+        <Toolbar sx={{ bgcolor: "background.darkestBlue" }}>
+          <MobileBox>
             <IconButton
               size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleMenu}
+              edge="start"
               color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
             >
-              <AccountCircle />
+              <MenuIcon />
             </IconButton>
+          </MobileBox>
+          <Typography variant="h6" component="span" sx={{ mr: 2 }}>
+            App
+          </Typography>
+          <NonMobileBox>
+            <MaterialLink component={RouterLink} to='/home' sx={{ flexGrow: 1, ml: 1, mr: 1, color: "#FFFFFF" }}>Home</MaterialLink>
+            <MaterialLink component={RouterLink} to='/about' sx={{ flexGrow: 1, ml: 1, mr: 1, color: "#FFFFFF" }}>About</MaterialLink>
+            {isAdmin ? <MaterialLink component={RouterLink} to='/users' sx={{ flexGrow: 1, ml: 1, mr: 1, color: "#FFFFFF" }}>Users</MaterialLink> : null}
+            {isAdmin ? <MaterialLink component={RouterLink} to='/dbeditor' sx={{ flexGrow: 1, ml: 1, mr: 1, color: "#FFFFFF" }}>DB Editor</MaterialLink> : null}
+            {(roles?.length > 0) ? <MaterialLink component={RouterLink} to='/profile' sx={{ flexGrow: 1, ml: 1, mr: 1, color: "#FFFFFF" }}>Profile</MaterialLink> : null}
+          </NonMobileBox>
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleMenu}
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
+          <Box>
             <Menu
               id="menu-appbar"
               anchorEl={anchorEl}
@@ -115,7 +135,7 @@ export default function MenuAppBar() {
               {(roles?.length > 0) ? <MenuItem onClick={handleLogout}>Logout</MenuItem> : null}
               {(roles?.length > 0) ? <MenuItem onClick={handleProfile}>Profile</MenuItem> : null}
             </Menu>
-          </div>
+          </Box>
         </Toolbar>
       </AppBar>
     </Box>

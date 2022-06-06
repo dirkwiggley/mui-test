@@ -1,19 +1,15 @@
 import { useEffect, useState } from 'react';
-import { Box, Paper } from "@mui/material";
+import { Box, Paper, TextField } from "@mui/material";
 import { useAuthContext } from './AuthContext';
 
-import { DARKEST_BLUE } from '../colors';
-
-const boxStyle = {
-  width: '100%',
-  bottom: 0,
-  position: "absolute",
-  borderRadius: 0
-};
 
 const paperStyle = {
-  backgroundColor: DARKEST_BLUE,
-  borderRadius: 0
+  bgcolor: "background.darkestBlue",
+  color: "#FFFFFF",
+  borderRadius: 0,
+  width: "100vw",
+  bottom: 0,
+  position: "absolute",
 }
 
 function Footer() {
@@ -45,9 +41,11 @@ function Footer() {
   
   return (
     <footer>
-      <Box sx={{ ...boxStyle }} >
-        <Paper sx={{ ...paperStyle}}>
-          {login ? out : "-"}
+      <Box sx={{ flexGrow: 1 }} >
+        <Paper sx={{ ...paperStyle, bgcolor: "background.darkestBlue" }}>
+          <Box sx={{ ml: 2 }}>
+            {login ? out : "-"}
+          </Box>
         </Paper>
       </Box>
     </footer>

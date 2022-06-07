@@ -42,8 +42,8 @@ const OffscreenTypography = styled(Typography, {
 function Login( { showLogin } ) {
   const { auth, setAuth } = useAuthContext();
 
-  const userRef = useRef();
-  const errRef = useRef();
+  const userRef = useRef(null);
+  const errRef = useRef(null);
 
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
@@ -51,6 +51,11 @@ function Login( { showLogin } ) {
   const [show, setShow] = useState(showLogin);
 
   let navigate = useNavigate();
+
+  useEffect(() => {
+    const loginElement = document.getElementById("login");
+    loginElement.focus();
+  }, []);
 
   useEffect(() => {
     setErrMsg('');
@@ -84,7 +89,7 @@ function Login( { showLogin } ) {
         if (!err?.response) {
           setErrMsg('No Server Response');
         } else if (err.response?.status === 400) {
-          setErrMsg('Missing Username or Password');
+          setErrMsg('Incorrect Username or Password');
         } else if (err.response?.status === 401) {
           setErrMsg('Unauthorized');
         } else {
@@ -110,17 +115,20 @@ function Login( { showLogin } ) {
                 <Grid container direction="column" spacing={2}>
                   <Grid item>
                     <TextField
-                      ref={userRef}
+                      id="login"
+                      // ref={userRef}
                       type="login"
                       placeholder="Login"
                       variant="outlined"
                       value={login}
                       onChange={changeLogin}
                       required
+                      // />
                       autoFocus={true} />
                   </Grid>
                   <Grid item>
                     <TextField
+                      id="pwd"
                       type="password"
                       placeholder="Password"
                       variant="outlined"

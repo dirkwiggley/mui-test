@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import {useAuthContext} from './AuthContext';
+import { useAuthContext } from './AuthContext';
 import { Box } from '@mui/material';
 
 function Home() {

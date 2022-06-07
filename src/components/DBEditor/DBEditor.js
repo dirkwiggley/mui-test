@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -27,6 +28,7 @@ import AddColumnDialog from './AddColumnDialog';
 import RemoveColumnDialog from './RemoveColumnDialog';
 import RenameTableDialog from './RenameTableDialog';
 import RenameColumnDialog from './RenameColumnDialog';
+import { useAuthContext } from '../AuthContext';
 
 import {
   getTables,
@@ -40,61 +42,7 @@ import {
   createNewRow,
   dropCol
 } from '../../api';
-import { useAuthContext } from '../AuthContext';
 
-// const useStyles = makeStyles(theme => ({
-//   bodyItem: {
-//     marginTop: "150px",
-//   },
-//   tableHeader: {
-//     marginTop: "50px",
-//     backgroundColor: theme.palette.grey[200],
-//     padding: theme.spacing(4),
-//   },
-//   headerElement: {
-//     backgroundColor: "#FFFCBB",
-//   },
-//   tableElement: {
-//     backgroundColor: 'white',
-//     cursor: 'pointer',
-//     '&:hover': {
-//       cursor: 'pointer',
-//       backgroundColor: theme.palette.grey[100],
-//     },
-//   },
-//   tableIdElement: {
-//     '&:hover': {
-//       backgroundColor: theme.palette.grey[100],
-//     },
-//   },
-//   menu: {
-//     fontSize: "14px",
-//     backgroundColor: "#fff",
-//     borderRadius: "2px",
-//     padding: "5px 0 5px 0",
-//     width: "150px",
-//     height: "auto",
-//     margin: "0",
-//     /* use absolute positioning  */
-//     position: "absolute",
-//     listStyle: "none",
-//     boxShadow: "0 0 20px 0 #ccc",
-//     opacity: "1",
-//     transition: "opacity 0.5s linear",
-//   },
-//   clickableBackground: {
-//     height: "100vh",
-//     width: "100vh",
-//     backgroundColor: "transparent",
-//     top: "0",
-//     left: "0",
-//     /* use absolute positioning  */
-//     position: "absolute",
-//     listStyle: "none",
-//     // opacity: "0.5",
-//     // transition: "opacity 0.5s linear",
-//   }
-// }));
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -157,7 +105,6 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-
 const StyledIdTableCell = styled(TableCell, {
   name: "StyledIdTableCell",
   slot: "Wrapper"
@@ -215,6 +162,8 @@ export default function CustomPaginationActionsTable() {
   const [showDBEMenu, setShowDBEMenu] = useState(false);
   const [currentSelection, setCurrentSelection] = useState({});
 
+  let navigate = useNavigate();
+
   useEffect(() => {
     console.log(JSON.stringify(currentSelection));
   }, [currentSelection]);
@@ -229,6 +178,23 @@ export default function CustomPaginationActionsTable() {
     }
     return true;
   }
+
+  useEffect(() => {
+    if (!auth || auth === {} || auth === "") {
+      navigate("/login");
+    }
+    try {
+      const user = JSON.parse(auth);
+      if (user && !user.active) {
+        navigate("/login");
+      } else if (user.resetpwd) {
+        navigate("/resetpassword")
+      }
+    } catch(err) {
+      console.error(err);
+      navigate("/login");
+    }
+  }, [auth, navigate]);
 
   useEffect(() => {
     getTables()
@@ -340,6 +306,7 @@ export default function CustomPaginationActionsTable() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
   //------------------------------------------------
 
   const closeMenu = (e) => {
@@ -443,18 +410,6 @@ export default function CustomPaginationActionsTable() {
   return (rows && currentSelection.tableName) ? (
     <StyledHeaderGrid>
       {showDBEMenu ? (
-        // <Box
-        //   sx={{
-        //     // height: "100vh",
-        //     // width: "100vh",
-        //     backgroundColor: "transparent",
-        //     top: "0",
-        //     left: "0",
-        //     /* use absolute positioning  */
-        //     position: "absolute",
-        //     listStyle: "none",
-        //   }}
-        //   onClick={(e) => closeMenu(e)}>
           <DBEMenu
             x={anchorPoint.x}
             y={anchorPoint.y}
@@ -468,7 +423,6 @@ export default function CustomPaginationActionsTable() {
             rtd={() => showRenameTableDialog}
             rcd={() => showRenameColumnDialog}
           />
-        // </Box>
       ) : null}
       <AddTableDialog
         openDlg={showAddTblDlg ? showAddTblDlg : false}

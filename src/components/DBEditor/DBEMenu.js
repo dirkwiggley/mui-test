@@ -1,17 +1,7 @@
-import * as React from 'react';
+import { useState } from 'react';
 
-import { TextField, List, ListItem, Box } from "@mui/material";
+import { TextField, Tooltip, Box, Menu, MenuItem } from "@mui/material";
 import { styled } from '@mui/system';
-
-
-const StyledListItem = styled(ListItem, {
-  name: "StyledListItem",
-  slot: "Wrapper"
-})({
-    paddingLeft: '5px',
-    cursor: 'pointer',
-    bgcolor: "background.lightestBlue",
-});
 
 const StyledBox = styled(Box, {
   name: "StyledBox",
@@ -36,11 +26,11 @@ const StyledBox = styled(Box, {
 const menuBox = {
   zIndex: "100",
   fontSize: "14px",
-  backgroundColor: "#fff",
-  borderRadius: "2px",
-  padding: "5px 0 5px 0",
-  width: "150px",
-  height: "auto",
+  // bgcolor: "background.lightestBlue",
+  // borderRadius: "2px",
+  // padding: "5px 0 5px 0",
+  // width: "150px",
+  // height: "auto",
   margin: "0",
   /* use absolute positioning  */
   position: "absolute",
@@ -49,59 +39,70 @@ const menuBox = {
   opacity: "1",
 }
 
-const menuItemBox = {
-  "&:hover": {
-    cursor: 'pointer',
-    bgcolor: "background.lightGray",
-  },
-}
+function DBEMenu({ x, y, anchorElement, ui, cs, ctd, dt, cc, dc, rtd, rcd }) {
+  const [updateItem] = useState(ui);
+  const [anchorEl, setAnchorEl] = useState(anchorElement);
+  const [xPos] = useState(x);
+  const [yPos] = useState(y);
+  const [currentSelection] = useState(cs);
+  const [showCreateTableDialog] = useState(ctd);
+  const [showRenameTableDialog] = useState(rtd);
+  const [showDeleteTableDialog] = useState(dt);
+  const [showCreateColumnDialog] = useState(cc);
+  const [showDeleteColumnDialog] = useState(dc);
+  const [showRenameColumnDialog] = useState(rcd);
+  const [open, setOpen] = useState(true);
 
-function DBEMenu({ x, y, ui, cs, ctd, dt, cc, dc, rtd, rcd }) {
-  const [updateItem] = React.useState(ui);
-  const [xPos] = React.useState(x);
-  const [yPos] = React.useState(y);
-  const [currentSelection] = React.useState(cs);
-  const [showCreateTableDialog] = React.useState(ctd);
-  const [showRenameTableDialog] = React.useState(rtd);
-  const [showDeleteTableDialog] = React.useState(dt);
-  const [showCreateColumnDialog] = React.useState(cc);
-  const [showDeleteColumnDialog] = React.useState(dc);
-  const [showRenameColumnDialog] = React.useState(rcd);
+  const handleClose = () => {
+    setOpen(false);
+  }
 
   const createHeaderMenu = (key) => {
     const ON_HEADER_ROW = 0;
     if (key === ON_HEADER_ROW) {
       return (
-        <List
+        <Menu
           sx={{
             ...menuBox,
-            top: yPos,
-            left: xPos
           }}
+          id="dbmenu"
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          open={open}
+          onClose={handleClose}
         >
-          <Box sx={{ ...menuItemBox }}> <StyledListItem onClick={() => showCreateTableDialog(true)}>Create new table</StyledListItem> </Box>
-          <Box sx={{ ...menuItemBox }}> <StyledListItem onClick={() => showDeleteTableDialog(true)}>Delete this table</StyledListItem> </Box>
-          <StyledListItem onClick={() => showRenameTableDialog(true)}>Rename this table</StyledListItem>
-          <StyledListItem onClick={() => showCreateColumnDialog(true)}>Add column</StyledListItem>
-          <StyledListItem onClick={() => showRenameColumnDialog(true)}>Rename this column</StyledListItem>
-        </List>
+          <MenuItem onClick={() => showCreateTableDialog(true)}>Create new table</MenuItem>
+          <MenuItem onClick={() => showDeleteTableDialog(true)}>Delete this table</MenuItem>
+          <MenuItem onClick={() => showRenameTableDialog(true)}>Rename this table</MenuItem>
+          <MenuItem onClick={() => showCreateColumnDialog(true)}>Add column</MenuItem>
+          <MenuItem onClick={() => showRenameColumnDialog(true)}>Rename this column</MenuItem>
+        </Menu>
       );
     } else {
       return (
-        <List
+        <Menu
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
           sx={{
             ...menuBox,
-            top: yPos,
-            left: xPos
           }}
         >
-          <StyledListItem onClick={() => showCreateTableDialog(true)}>Create new table</StyledListItem>
-          <StyledListItem onClick={() => showDeleteTableDialog(true)}>Delete this table</StyledListItem>
-          <StyledListItem onClick={() => showRenameTableDialog(true)}>Rename this table</StyledListItem>
-          <StyledListItem onClick={() => showCreateColumnDialog(true)}>Add column</StyledListItem>
-          <StyledListItem onClick={() => showDeleteColumnDialog(true)}>Remove column</StyledListItem>
-          <StyledListItem onClick={() => showRenameColumnDialog(true)}>Rename this column</StyledListItem>
-        </List>
+          <MenuItem onClick={() => showCreateTableDialog(true)}>Create new table</MenuItem>
+          <MenuItem onClick={() => showDeleteTableDialog(true)}>Delete this table</MenuItem>
+          <MenuItem onClick={() => showRenameTableDialog(true)}>Rename this table</MenuItem>
+          <MenuItem onClick={() => showCreateColumnDialog(true)}>Add column</MenuItem>
+          <MenuItem onClick={() => showDeleteColumnDialog(true)}>Remove column</MenuItem>
+          <MenuItem onClick={() => showRenameColumnDialog(true)}>Rename this column</MenuItem>
+        </Menu>
       );
     }
   }
@@ -122,32 +123,33 @@ function DBEMenu({ x, y, ui, cs, ctd, dt, cc, dc, rtd, rcd }) {
     if (columnName !== "id") {
       return (
         <StyledBox
-          // className={classes.menu}
           sx={{
             top: yPos,
             left: xPos,
             // opacity: "1",
-            // backgroundColor: "white"
+            bgcolor: "background.lightestBlue"
           }}
         >
-          <TextField
-            sx={{ zIndex: "100", backgroundColor: "white" }}
-            id="outlined-basic" 
-            label="New Value" 
-            variant="outlined" 
-            defaultValue={currentSelection.value}
-            onKeyUp={(e) => textEntered(e)}
-            onClick={editorClicked}
-            autoFocus />
-      </StyledBox>
+          <Tooltip title="While selected escape to close">
+            <TextField
+              sx={{ zIndex: "100", backgroundColor: "white" }}
+              id="outlined-basic"
+              label="New Value"
+              variant="outlined"
+              defaultValue={currentSelection.value}
+              onKeyUp={(e) => textEntered(e)}
+              onClick={editorClicked}
+              autoFocus />
+          </Tooltip>
+        </StyledBox>
       )
     }
   }
 
   return (
     <div>
-      {currentSelection.id === "header" ? 
-        createHeaderMenu(currentSelection.id) : 
+      {currentSelection.id === "header" ?
+        createHeaderMenu(currentSelection.id) :
         createRowDataEditor(currentSelection.columnName)
       }
     </div>

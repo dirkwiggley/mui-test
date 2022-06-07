@@ -252,7 +252,7 @@ export default function CustomPaginationActionsTable() {
       if (id === "header") { columnName = value };
       const newCS = { id: id, columnName: columnName, value: value, tableName: tableName };
       setCurrentSelection(newCS);
-      setAnchorPoint({ x: event.pageX, y: event.pageY });
+      setAnchorPoint({ x: event.pageX, y: event.pageY, anchorEl: event.target });
       setShowDBEMenu(!showDBEMenu);
     },
     [setAnchorPoint, setShowDBEMenu, showDBEMenu]
@@ -443,21 +443,22 @@ export default function CustomPaginationActionsTable() {
   return (rows && currentSelection.tableName) ? (
     <StyledHeaderGrid>
       {showDBEMenu ? (
-        <Box
-          sx={{
-            height: "100vh",
-            width: "100vh",
-            backgroundColor: "transparent",
-            top: "0",
-            left: "0",
-            /* use absolute positioning  */
-            position: "absolute",
-            listStyle: "none",
-          }}
-          onClick={(e) => closeMenu(e)}>
+        // <Box
+        //   sx={{
+        //     // height: "100vh",
+        //     // width: "100vh",
+        //     backgroundColor: "transparent",
+        //     top: "0",
+        //     left: "0",
+        //     /* use absolute positioning  */
+        //     position: "absolute",
+        //     listStyle: "none",
+        //   }}
+        //   onClick={(e) => closeMenu(e)}>
           <DBEMenu
             x={anchorPoint.x}
             y={anchorPoint.y}
+            anchorElement={anchorPoint.anchorEl}
             ui={() => updateItem}
             cs={currentSelection}
             ctd={() => showAddTableDialog}
@@ -467,7 +468,7 @@ export default function CustomPaginationActionsTable() {
             rtd={() => showRenameTableDialog}
             rcd={() => showRenameColumnDialog}
           />
-        </Box>
+        // </Box>
       ) : null}
       <AddTableDialog
         openDlg={showAddTblDlg ? showAddTblDlg : false}
